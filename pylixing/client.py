@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class LixingClient(object):
-    """A simple client used to call Dida (http://www.didatravel.com/) APIs.
+    """A simple client used to call lixing (http://www.lixing.biz/) APIs.
 
     :param user: user
     :param secret_key: secret_key used for signature
