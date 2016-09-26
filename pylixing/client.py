@@ -69,10 +69,10 @@ class LixingClient(object):
 
     def search_product(self, order_by='PRICE', start=1, end=10,
                        currency='CNY', ascend=True, destination_code='',
-                       keyword='', product_codes=[], tags=[]):
+                       keyword='', product_codes='', tags=''):
         """根据条件查询产品的数量
 
-        接口名称：根据条件查询产品的基本信息
+        接口名称：searchProduct
 
         :param destination_code: 目的地code
         :param product_codes: 产品codes
@@ -90,14 +90,18 @@ class LixingClient(object):
         """
         return self._do_request('searchProduct',
                                 destination_code=destination_code,
-                                product_codes=product_codes,
-                                tags=tags, keyword=keyword,
-                                currency=currency, order_by=order_by,
-                                ascend=ascend, start=start, end=end,
+                                product_codes=product_codes or [],
+                                tags=tags or [],
+                                keyword=keyword,
+                                currency=currency,
+                                order_by=order_by,
+                                ascend=ascend,
+                                start=start,
+                                end=end,
                                 model_class=SearchInfo)
 
-    def search_product_count(self, destination_code='', product_codes=[],
-                             tags=[], currency='CNY', keyword=''):
+    def search_product_count(self, destination_code='', product_codes='',
+                             tags='', currency='CNY', keyword=''):
         """根据条件查询产品的数量
 
         接口名称：searchProductCount
@@ -110,8 +114,9 @@ class LixingClient(object):
         """
         return self._do_request('searchProductCount',
                                 destination_code=destination_code,
-                                product_codes=product_codes,
-                                tags=tags, keyword=keyword,
+                                product_codes=product_codes or [],
+                                tags=tags or [],
+                                keyword=keyword,
                                 currency=currency)
 
     def get_product_detail(self, product_code, currency='CNY'):
@@ -141,6 +146,8 @@ class LixingClient(object):
     def get_sale_item_detail(self, sale_codes, currency='CNY'):
         """根据销售项目code查询销售项目的详细信息
 
+        接口名称：getSaleItemDetail
+
         :param sale_codes: 销售项目code
         :param currency: 币种
         """
@@ -151,6 +158,8 @@ class LixingClient(object):
 
     def get_price_by_day(self, sale_code, travel_date, currency='CNY'):
         """根据销售项目code和日期查询价格信息
+
+        接口名称：getPriceByDay
 
         :param sale_code: 销售项目code
         :param travel_date: 日期
@@ -166,6 +175,8 @@ class LixingClient(object):
                             travel_date, travel_date_end,
                             currency='CNY'):
         """根据销售项目code或者产品code和日期查询价格信息
+
+        接口名称：getPriceByPeriod
 
         :param sale_code: 销售项目code
         :param product_code: 产品code
@@ -191,6 +202,8 @@ class LixingClient(object):
     def get_available_dates(self, sale_code):
         """根据销售项目code查询可售日期信息
 
+        接口名称：getAvailableDates
+
         :param sale_code: 销售项目code
         """
         return self._do_request('getAvailableDates',
@@ -200,6 +213,8 @@ class LixingClient(object):
     def get_pick_or_drop(self, product_codes):
         """根据产品code查询接送信息
 
+        接口名称：getPickOrDrop
+
         :param product_codes: 产品code
         """
         return self._do_request('getPickOrDrop',
@@ -208,6 +223,8 @@ class LixingClient(object):
 
     def get_price_segment(self, product_code, currency='CNY'):
         """与按天获取价格不同，返回一段时间内产品的价格（产品编码为S01起头的以及酒店产品不适用）
+
+        接口名称：getPriceSegment
 
         :param product_code:
         :param currency:
@@ -219,9 +236,11 @@ class LixingClient(object):
                                 model_class=PricesCollection)
 
     def get_availability(self, sale_code, travel_date, end_date,
-                         currency='CNY', booked_specifications=[],
-                         booked_additional_options=[]):
+                         currency='CNY', booked_specifications='',
+                         booked_additional_options=''):
         """传入购买的销售项目code，以及购买的规格或附加选项的code和数量，获取相应的可售信息和最新的准确价格信息
+
+        接口名称：getAvailablity
 
         :param sale_code: 销售项目code
         :param travel_date: 旅行起始时间
@@ -235,22 +254,26 @@ class LixingClient(object):
                                 travel_date=travel_date,
                                 end_date=end_date,
                                 currency=currency,
-                                booked_specifications=booked_specifications,
-                                booked_additional_options=booked_additional_options,
+                                booked_specifications=booked_specifications or [],
+                                booked_additional_options=booked_additional_options or [],
                                 model_class=Availability)
 
-    def get_book_limits(self, sale_codes=[]):
+    def get_book_limits(self, sale_codes=''):
         """传入saleCode获取预订限制
+
+        接口名称：getBookLimits
 
         :param sale_codes: 销售项目code列表
         """
         return self._do_request('getBookLimits',
-                                sale_codes=sale_codes,
+                                sale_codes=sale_codes or [],
                                 model_class=BookLimit)
 
     def book(self, distributor_order_refer, booker_name, booker_email,
-             booker_phone, callback_url, items=[], currency='CNY'):
+             booker_phone, callback_url, items='', currency='CNY'):
         """传入预订信息，创建订单，返回预订状态以及力行订单号
+
+        接口名称：book
 
         :param distributor_order_refer: 分销商订单refers(必填)
         :param booker_name: 预订人姓名
@@ -303,12 +326,14 @@ class LixingClient(object):
                                 booker_email=booker_email,
                                 booker_phone=booker_phone,
                                 callback_url=callback_url,
-                                items=items,
+                                items=items or [],
                                 currency=currency,
                                 model_class=Book)
 
     def get_order_status(self, order_cds, ref_order_cds):
         """传入订单cd查询订单订项的状态
+
+        接口名称：getOrderStatus
 
         :param order_cds: lixing订单cd
         :param order_cds: 分销商订单cd
@@ -321,6 +346,8 @@ class LixingClient(object):
     def confirm(self, order_cd):
         """传入需要确认的订单cd，力行会执行供应
 
+        接口名称：confirm
+
         :param order_cd: 订单cd
         """
         return self._do_request('confirm',
@@ -329,6 +356,8 @@ class LixingClient(object):
 
     def refund(self, order_cd, refund_reason, order_item_cd):
         """传入订单cd和 订项cd 进行整单退订
+
+        接口名称：refund
 
         :param order_cd: 订单cd
         :param refund_reason: 退订原因
